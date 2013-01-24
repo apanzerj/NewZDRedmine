@@ -1,0 +1,22 @@
+li {
+  & + li                      { margin-top: 0.4em; }
+            .project_list_li  { visibility: hidden; }
+  &:hover   .project_list_li  { visibility: visible; }
+}
+textarea {
+  width: 280px;
+  height: 100px;
+}
+
+input {
+  width: 280px;
+}
+
+#newIssue {
+  font-size:12px;
+}
+
+#newIssue > p {
+  margin-top: 5px;
+}
+

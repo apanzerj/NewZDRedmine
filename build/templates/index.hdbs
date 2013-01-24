@@ -1,0 +1,13 @@
+<div id="newIssue">
+<p>Subject: </p>
+<p><input type="text" id="rm_subject"></p>
+<p>Tracker: </p>
+<p><select id="rm_tracker">
+{{#each track.trackers}}
+<option value="{{this.id}}">{{this.name}}</option>
+{{/each}}
+</select></p>
+<p>Additional Comments: </p>
+<p><textarea id="rm_note" /></p>
+<p><a href="#" class="btn" id="submitToRedmine">Submit</a></p>
+</div>
