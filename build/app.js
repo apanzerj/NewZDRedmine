@@ -87,13 +87,7 @@
       var xml = this.$(result);
       var id = xml.find("id");
       id = id.text();
-      var data = {};
-      data.ticket = {};
-      data.ticket.comment = {};
-      data.ticket.comment = {"public":false, "value":"This ticket was pushed to Redmine\n\n"+this.settings.redmine_url+"/issues/"+id+"\n\n"};
-      data.ticket.metadata = {};
-      data.ticket.metadata.pushed_to_redmine = true;
-      data.ticket.metadata.redmine_id = id;
+      var data = {"ticket":{"comment":{"public":false, "value":"This ticket was pushed to Redmine\n\n"+this.settings.redmine_url+"/issues/"+id+"\n\n"}, "metadata":{"pushed_to_redmine":true, "redmine_id": id}}};
       data = JSON.stringify(data);
       this.ajax('updateTicket', this.ticket().id(), data);
     },
