@@ -5,7 +5,6 @@
     TRACKERS: [],
     PROJECTS: [],
     appID:  'RedmineAPP_IntegrationV1',
-    //defaultState: 'loading',
     requests: {
       getAudit: function(id)
       {
@@ -89,13 +88,7 @@
     },
     fn_result: function(result){
       services.notify(this.I18n.t('issue.posted'));
-      /*var xml = this.$(result);
-      var id = xml.find("id");
-      id = id.text();
-      */
-
       id = result.issue.id
-      
       var data = {"ticket":{"comment":{"public":false, "value":"This ticket was pushed to Redmine\n\n"+this.settings.redmine_url+"/issues/"+id+"\n\n"}, "metadata":{"pushed_to_redmine":true, "redmine_id": id}}};
       data = JSON.stringify(data);
       this.ajax('updateTicket', this.ticket().id(), data);
@@ -106,10 +99,8 @@
         this.fn_renderError("No data returned. Please check your API key.");
       }else{
         this.PROJECTS = data;
-        //this.ajax('getAudit', this.ticket().id());
         this.switchTo('projectList', {project_data: data});
         this.ajax('getAudit', this.ticket().id());
-        //this.ajax('getTrackers', this.settings.redmine_url, this.settings.apiKey);
       }
     },
     fn_prep_to_post: function(){
@@ -120,10 +111,8 @@
         services.notify('You must include a subject.', 'error');
       }else{
         var ticket_desc = this.ticket().description();
-        //ticket_desc = ticket_desc.replace( /&/gim, ' &amp; ' ).replace( /</gim, ' &lt; ').replace( />/gim, ' &gt; ').replace(/:/gim, '');
         ticket_desc = ticket_desc.replace( /&/gim, '' ).replace( /</gim, '').replace( />/gim, '').replace(/:/gim, '');
         var data = {"issue": {"subject": subject, "project_id": this.PROJECT_TO_USE, "tracker_id": tracker, "description": "This issue was pushed from Zendesk to Redmine.\n---\n\nDescription:\n"+ticket_desc+"\n---\n\nAdditional Message from Zendesk\n---\n"+this.$('#rm_note').val()+"\n\nTicket URL: https://"+this.currentAccount().subdomain()+".zendesk.com/tickets/"+this.ticket().id()+"\n\n"}}
-        //var data = '<issue><subject>'+subject+'</subject><project_id>'+this.PROJECT_TO_USE+'</project_id><tracker_id>'+tracker+'</tracker_id><description>This issue was pushed from Zendesk to Redmine.\n---\n\nDescription:\n'+ticket_desc+'\n---\n\nAdditional Message from Zendesk\n---\n'+this.$('#rm_note').val()+'\n\nTicket URL: https://'+this.currentAccount().subdomain()+'.zendesk.com/tickets/'+this.ticket().id()+'\n\n</description></issue>';
         this.ajax('postRedmine', this.settings.project, this.settings.apiKey, this.settings.redmine_url, data);
       }
     },
@@ -131,13 +120,11 @@
     {
       this.PROJECT_TO_USE = e.target.id;
       this.ajax('getTrackers', this.settings.redmine_url, this.settings.apiKey);
-      //this.switchTo('index', {track: this.TRACKERS});
     },
     fn_saveTrackers: function(data)
     {
       this.TRACKERS = data.project;
       this.switchTo('index', {track: this.TRACKERS});
-      //this.ajax('getAudit', this.ticket().id());
     },
     fn_listMeta: function(data)
     {
