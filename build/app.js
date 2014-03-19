@@ -5,7 +5,7 @@
     TRACKERS: [],
     PROJECTS: [],
     appID:  'RedmineAPP_IntegrationV1',
-    defaultState: 'loading',
+    //defaultState: 'loading',
     requests: {
       getAudit: function(id)
       {
@@ -13,7 +13,8 @@
           url: '/api/v2/tickets/'+id+'/audits.json',
           type: 'GET',
           contentType: 'application/json',
-          dataType: 'json'
+          dataType: 'json',
+          proxy_v2: true
         };
       },
       updateTicket: function(id, data)
@@ -23,25 +24,28 @@
           type: 'PUT',
           data: data,
           dataType: 'json',
-          contentType: 'application/json'
+          contentType: 'application/json',
+          proxy_v2: true
         };
       },
       postRedmine: function( project, apiKey, redmine_url, data)
       {
         return {
-          url: redmine_url+'/issues.xml?key='+apiKey,
+          url: redmine_url+'/issues.json?key='+apiKey,
           type: 'POST',
           username: apiKey,
           password: 'anything',
-          dataType: 'xml',
-          data: data
+          dataType: 'json',
+          data: data,
+          proxy_v2: true
         };
       },
       getProjects: function(redmine_url, apiKey){
         return {
           url: redmine_url+'/projects.json?key='+apiKey,
           type:'GET',
-          dataType: 'json'
+          dataType: 'json',
+          proxy_v2: true
         };
       },
       getTrackers: function(redmine_url, apiKey)
@@ -49,7 +53,8 @@
         return {
           url: redmine_url+'/projects/'+this.PROJECT_TO_USE+'.json?key='+apiKey+'&include=trackers',
           type: 'GET',
-          dataType: 'json'
+          dataType: 'json',
+          proxy_v2: true
         };
       }
    },
@@ -60,7 +65,7 @@
       'getProjects.done': 'fn_listProjects',
       'getTrackers.done': 'fn_saveTrackers',
       'getAudit.done': 'fn_listMeta',
-      'click a.project': 'fn_projectSelect'
+      'click .project': 'fn_projectSelect'
     },
     fn_renderError: function(error_text)
     {
@@ -84,9 +89,13 @@
     },
     fn_result: function(result){
       services.notify(this.I18n.t('issue.posted'));
-      var xml = this.$(result);
+      /*var xml = this.$(result);
       var id = xml.find("id");
       id = id.text();
+      */
+
+      id = result.issue.id
+      
       var data = {"ticket":{"comment":{"public":false, "value":"This ticket was pushed to Redmine\n\n"+this.settings.redmine_url+"/issues/"+id+"\n\n"}, "metadata":{"pushed_to_redmine":true, "redmine_id": id}}};
       data = JSON.stringify(data);
       this.ajax('updateTicket', this.ticket().id(), data);
@@ -113,7 +122,8 @@
         var ticket_desc = this.ticket().description();
         //ticket_desc = ticket_desc.replace( /&/gim, ' &amp; ' ).replace( /</gim, ' &lt; ').replace( />/gim, ' &gt; ').replace(/:/gim, '');
         ticket_desc = ticket_desc.replace( /&/gim, '' ).replace( /</gim, '').replace( />/gim, '').replace(/:/gim, '');
-        var data = '<issue><subject>'+subject+'</subject><project_id>'+this.PROJECT_TO_USE+'</project_id><tracker_id>'+tracker+'</tracker_id><description>This issue was pushed from Zendesk to Redmine.\n---\n\nDescription:\n'+ticket_desc+'\n---\n\nAdditional Message from Zendes\n---\n'+this.$('#rm_note').val()+'\n\nTicket URL: https://'+this.currentAccount().subdomain()+'.zendesk.com/tickets/'+this.ticket().id()+'\n\n</description></issue>';
+        var data = {"issue": {"subject": subject, "project_id": this.PROJECT_TO_USE, "tracker_id": tracker, "description": "This issue was pushed from Zendesk to Redmine.\n---\n\nDescription:\n"+ticket_desc+"\n---\n\nAdditional Message from Zendesk\n---\n"+this.$('#rm_note').val()+"\n\nTicket URL: https://"+this.currentAccount().subdomain()+".zendesk.com/tickets/"+this.ticket().id()+"\n\n"}}
+        //var data = '<issue><subject>'+subject+'</subject><project_id>'+this.PROJECT_TO_USE+'</project_id><tracker_id>'+tracker+'</tracker_id><description>This issue was pushed from Zendesk to Redmine.\n---\n\nDescription:\n'+ticket_desc+'\n---\n\nAdditional Message from Zendesk\n---\n'+this.$('#rm_note').val()+'\n\nTicket URL: https://'+this.currentAccount().subdomain()+'.zendesk.com/tickets/'+this.ticket().id()+'\n\n</description></issue>';
         this.ajax('postRedmine', this.settings.project, this.settings.apiKey, this.settings.redmine_url, data);
       }
     },

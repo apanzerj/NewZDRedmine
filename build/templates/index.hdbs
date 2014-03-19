@@ -9,5 +9,5 @@
 </select></p>
 <p>Additional Comments: </p>
 <p><textarea id="rm_note" /></p>
-<p><a href="#" class="btn" id="submitToRedmine">Submit</a></p>
+<p><a class="btn" id="submitToRedmine">Submit</a></p>
 </div>

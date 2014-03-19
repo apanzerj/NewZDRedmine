@@ -2,7 +2,7 @@
 <p><h3>Current Projects:</h3></p>
 <ul>
 {{#each project_data.projects}}
-<li><i class="icon-arrow-right project_list_li"></i> <a href="#" id="{{this.id}}" class="project">{{this.id}} - {{this.name}}</a></li>
+<li><i class="icon-arrow-right project_list_li"></i> <a id="{{this.id}}" class="project">{{this.id}} - {{this.name}}</a></li>
 {{/each}}
 </ul>
 </div>
