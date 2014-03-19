@@ -4,7 +4,7 @@
     PROJECT_TO_USE: '1',
     TRACKERS: [],
     PROJECTS: [],
-    appID:  'RedmineAPP_IntegrationV1',
+    appID:  'RedmineAPP_IntegrationV2',
     requests: {
       getAudit: function(id)
       {
