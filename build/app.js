@@ -47,6 +47,14 @@
           proxy_v2: true
         };
       },
+      getIssue: function(redmine_url, apiKey, issue_id){
+        return {
+          url: redmine_url+'/issues/'+issue_id+'.json?key='+apiKey,
+          type:'GET',
+          dataType: 'json',
+          proxy_v2: true
+        };
+      },
       getTrackers: function(redmine_url, apiKey)
       {
         return {
@@ -58,13 +66,17 @@
       }
    },
     events: {
-      'app.activated': 'onActivated',
-      'postRedmine.done': 'fn_result',
-      'click #submitToRedmine': 'fn_prep_to_post',
-      'getProjects.done': 'fn_listProjects',
-      'getTrackers.done': 'fn_saveTrackers',
-      'getAudit.done': 'fn_listMeta',
-      'click .project': 'fn_projectSelect'
+      'app.activated'           : 'onActivated',
+      'postRedmine.done'        : 'fn_result',
+      'click #submitToRedmine'  : 'fn_prep_to_post',
+      'getProjects.done'        : 'fn_listProjects',
+      'getTrackers.done'        : 'fn_saveTrackers',
+      'getAudit.done'           : 'fn_listMeta',
+      'click .project'          : 'fn_projectSelect',
+      'updateTicket.done'       : 'fn_reset',
+      'click .issue'            : 'fn_get_issue',
+      'getIssue.done'           : 'fn_show_issue',
+      'click .back_button'      : 'onActivated'
     },
     fn_renderError: function(error_text)
     {
@@ -139,7 +151,8 @@
           if(pushed_to_redmine){
             redmine=true;
             redmine_id = data.audits[i].metadata.custom.redmine_id;
-            html += '<p><a href="'+this.settings.redmine_url+'/issues/'+redmine_id+'">Issue '+redmine_id+'</a></p>';
+            //html += '<p><a class="issue id_'+redmine_id+'" href="'+this.settings.redmine_url+'/issues/'+redmine_id+'">Issue '+redmine_id+'</a></p>';
+            html += '<p><a class="issue id_'+redmine_id+'">Issue '+redmine_id+'</a></p>';
           }else{
           }
         }catch(err){
@@ -151,6 +164,16 @@
       }else{
         this.switchTo('projectList', {project_data: this.PROJECTS});
       }
+    },
+    fn_reset: function(){
+      this.ajax('getProjects', this.settings.redmine_url, this.settings.apiKey);
+    },
+    fn_get_issue: function(e){
+      issue_id = e.target.classList[1].replace("id_", "")
+      this.ajax('getIssue', this.settings.redmine_url, this.settings.apiKey, issue_id)
+    },
+    fn_show_issue: function(data){
+      this.switchTo('show_issue', {issue: data.issue})
     }
   };
 }());

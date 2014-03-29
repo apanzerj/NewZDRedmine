@@ -7,16 +7,18 @@ textarea {
   width: 280px;
   height: 100px;
 }
-
 input {
   width: 280px;
 }
-
 #newIssue {
   font-size:12px;
 }
-
 #newIssue > p {
   margin-top: 5px;
 }
-
+.subject{
+  font-size: 12px;
+}
+.caption{
+  font-weight: bold;
+}

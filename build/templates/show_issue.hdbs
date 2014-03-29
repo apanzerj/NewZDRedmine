@@ -1,0 +1,22 @@
+<div>
+<p class="caption subject">Subject:</p>
+<p>{{issue.subject}}</p>
+<br />
+<p class="caption">Project Name:</p>
+<p>{{issue.project.name}}</p>
+<br />
+<p class="caption">Tracker/Status/Priority:</p>
+<p>
+  <span class="label">{{issue.tracker.name}}</span> /
+  <span class="label">{{issue.status.name}}</span> /
+  <span class="label">{{issue.priority.name}}</span>
+</p>
+<br />
+<p class="caption">Author:</p>
+<p>{{issue.author.name}}</p>
+<br />
+<p class="caption">Description</p>
+<p>{{issue.description}}</p>
+<br />
+<a class="back_button">Back</a>
+</div>
