@@ -16,9 +16,6 @@ input {
 #newIssue > p {
   margin-top: 5px;
 }
-.subject{
-  font-size: 12px;
-}
 .caption{
   font-weight: bold;
 }

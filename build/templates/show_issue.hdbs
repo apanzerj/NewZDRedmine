@@ -18,5 +18,9 @@
 <p class="caption">Description</p>
 <p>{{issue.description}}</p>
 <br />
-<a class="back_button">Back</a>
+<p><span class="caption">% Done:</span> {{issue.done_ratio}}</p>
+<br />
+<p><span class="caption">Time Spent:</span> {{issue.spent_hours}}</p>
+<br />
+<a class="back_button">Back</a> - <a href="{{url}}" target="_new">Open In Redmine</a>
 </div>

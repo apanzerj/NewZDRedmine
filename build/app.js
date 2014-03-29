@@ -1,5 +1,4 @@
 (function(){
- 
   return {
     PROJECT_TO_USE: '1',
     TRACKERS: [],
@@ -92,7 +91,7 @@
       if ( !this.doneLoading && this.ticket().status() != null && this.ticket().requester().id()) {
         this.doneLoading = true;
         if(this.settings.redmine_url.search('\/$') != -1){
-          this.fn_renderError('Your Redmine URL has a "/" at the end. Remove it and try again.', 'error');
+          this.fn_renderError('Your Redmine URL has a "/" at the end. Remove it and try again.<p>' + this.settings.redmine_url + '</p>', 'error');
         }else{
           this.ajax('getProjects', this.settings.redmine_url, this.settings.apiKey);
         }
@@ -151,7 +150,6 @@
           if(pushed_to_redmine){
             redmine=true;
             redmine_id = data.audits[i].metadata.custom.redmine_id;
-            //html += '<p><a class="issue id_'+redmine_id+'" href="'+this.settings.redmine_url+'/issues/'+redmine_id+'">Issue '+redmine_id+'</a></p>';
             html += '<p><a class="issue id_'+redmine_id+'">Issue '+redmine_id+'</a></p>';
           }else{
           }
@@ -173,7 +171,7 @@
       this.ajax('getIssue', this.settings.redmine_url, this.settings.apiKey, issue_id)
     },
     fn_show_issue: function(data){
-      this.switchTo('show_issue', {issue: data.issue})
+      this.switchTo('show_issue', {issue: data.issue, url: this.settings.redmine_url+"/issues/"+data.issue.id })
     }
   };
-}());
+}());    
