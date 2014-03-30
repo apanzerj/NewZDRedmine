@@ -19,3 +19,6 @@ input {
 .caption{
   font-weight: bold;
 }
+.progress{
+  width:100px;
+}

@@ -6,4 +6,7 @@
 {{/each}}
 </ul>
 </div>
-<p><div id="issues_list" /></p>
+<p><h3> Issue List: </h3></p>
+{{#each issue}}
+<a class="issue id_{{this}} btn btn-mini">Issue {{this}}</a>
+{{/each}}

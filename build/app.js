@@ -142,25 +142,22 @@
       var pushed_to_redmine = false;
       var redmine_id = 0;
       var redmine = false;
-      var html = "<p></p>";
+      issue_list = []
       for(var i=0; i<=data.count; i++)
       {
         try{
-          pushed_to_redmine = data.audits[i].metadata.custom.pushed_to_redmine;
-          if(pushed_to_redmine){
+          redmine_meta = data.audits[i].metadata.custom
+          if(redmine_meta.pushed_to_redmine){
             redmine=true;
-            redmine_id = data.audits[i].metadata.custom.redmine_id;
-            html += '<p><a class="issue id_'+redmine_id+'">Issue '+redmine_id+'</a></p>';
-          }else{
+            issue_list.push(redmine_meta.redmine_id)
           }
         }catch(err){
         }
       }
       if(redmine){
-        this.switchTo('projectList', {project_data: this.PROJECTS});
-        this.$('#issues_list').html("<p><h3>Linked Issues:</h3></p>"+html);
+        this.switchTo('projectList', {project_data: this.PROJECTS, issue: issue_list});
       }else{
-        this.switchTo('projectList', {project_data: this.PROJECTS});
+        this.switchTo('projectList', {project_data: this.PROJECTS, issue: []});
       }
     },
     fn_reset: function(){
