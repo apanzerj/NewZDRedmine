@@ -99,7 +99,7 @@
     },
     fn_result: function(result){
       services.notify(this.I18n.t('issue.posted'));
-      id = result.issue.id
+      var id = result.issue.id;
       var data = {"ticket":{"comment":{"public":false, "value":"This ticket was pushed to Redmine\n\n"+this.settings.redmine_url+"/issues/"+id+"\n\n"}, "metadata":{"pushed_to_redmine":true, "redmine_id": id}}};
       data = JSON.stringify(data);
       this.ajax('updateTicket', this.ticket().id(), data);
@@ -123,7 +123,7 @@
       }else{
         var ticket_desc = this.ticket().description();
         ticket_desc = ticket_desc.replace( /&/gim, '' ).replace( /</gim, '').replace( />/gim, '').replace(/:/gim, '');
-        var data = {"issue": {"subject": subject, "project_id": this.PROJECT_TO_USE, "tracker_id": tracker, "description": "This issue was pushed from Zendesk to Redmine.\n---\n\nDescription:\n"+ticket_desc+"\n---\n\nAdditional Message from Zendesk\n---\n"+this.$('#rm_note').val()+"\n\nTicket URL: https://"+this.currentAccount().subdomain()+".zendesk.com/tickets/"+this.ticket().id()+"\n\n"}}
+        var data = {"issue": {"subject": subject, "project_id": this.PROJECT_TO_USE, "tracker_id": tracker, "description": "This issue was pushed from Zendesk to Redmine.\n---\n\nDescription:\n"+ticket_desc+"\n---\n\nAdditional Message from Zendesk\n---\n"+this.$('#rm_note').val()+"\n\nTicket URL: https://"+this.currentAccount().subdomain()+".zendesk.com/tickets/"+this.ticket().id()+"\n\n"}};
         this.ajax('postRedmine', this.settings.project, this.settings.apiKey, this.settings.redmine_url, data);
       }
     },
@@ -142,14 +142,14 @@
       var pushed_to_redmine = false;
       var redmine_id = 0;
       var redmine = false;
-      issue_list = []
+      var issue_list = [];
       for(var i=0; i<=data.count; i++)
       {
         try{
-          redmine_meta = data.audits[i].metadata.custom
+          var redmine_meta = data.audits[i].metadata.custom;
           if(redmine_meta.pushed_to_redmine){
             redmine=true;
-            issue_list.push(redmine_meta.redmine_id)
+            issue_list.push(redmine_meta.redmine_id);
           }
         }catch(err){
         }
@@ -164,11 +164,11 @@
       this.ajax('getProjects', this.settings.redmine_url, this.settings.apiKey);
     },
     fn_get_issue: function(e){
-      issue_id = e.target.classList[1].replace("id_", "")
-      this.ajax('getIssue', this.settings.redmine_url, this.settings.apiKey, issue_id)
+      var issue_id = e.target.classList[1].replace("id_", "");
+      this.ajax('getIssue', this.settings.redmine_url, this.settings.apiKey, issue_id);
     },
     fn_show_issue: function(data){
-      this.switchTo('show_issue', {issue: data.issue, url: this.settings.redmine_url+"/issues/"+data.issue.id })
+      this.switchTo('show_issue', {issue: data.issue, url: this.settings.redmine_url+"/issues/"+data.issue.id });
     }
   };
 }());    
