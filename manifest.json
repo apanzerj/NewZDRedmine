@@ -3,7 +3,7 @@
     "name" :"Adam Panzer",
     "email": "apanzer@zendesk.com"
   },
-    "frameworkVersion": "0.5",
+    "frameworkVersion": "1.0",
     "location":"ticket_sidebar",
     "defaultLocale": "en",
     "private": true,
@@ -18,7 +18,8 @@
       {
         "name":"apiKey",
         "type":"text",
-        "required":true
+        "required":true,
+        "secure":true
       }
      ]
 }
