@@ -11,8 +11,7 @@
           url: '/api/v2/tickets/'+id+'/audits.json',
           type: 'GET',
           contentType: 'application/json',
-          dataType: 'json',
-          proxy_v2: true
+          dataType: 'json'
         };
       },
       updateTicket: function(id, data)
@@ -22,45 +21,42 @@
           type: 'PUT',
           data: data,
           dataType: 'json',
-          contentType: 'application/json',
-          proxy_v2: true
+          contentType: 'application/json'
         };
       },
-      postRedmine: function( project, apiKey, redmine_url, data)
+      postRedmine: function(project, redmine_url, data)
       {
         return {
-          url: redmine_url+'/issues.json?key='+apiKey,
+          url: redmine_url+'/issues.json?key={{setting.apiKey}}',
           type: 'POST',
-          username: apiKey,
-          password: 'anything',
           dataType: 'json',
           data: data,
-          proxy_v2: true
+          secure: true
         };
       },
-      getProjects: function(redmine_url, apiKey){
+      getProjects: function(redmine_url){
         return {
-          url: redmine_url+'/projects.json?key='+apiKey,
+          url: redmine_url+'/projects.json?key={{setting.apiKey}}',
           type:'GET',
           dataType: 'json',
-          proxy_v2: true
+          secure: true
         };
       },
-      getIssue: function(redmine_url, apiKey, issue_id){
+      getIssue: function(redmine_url, issue_id){
         return {
-          url: redmine_url+'/issues/'+issue_id+'.json?key='+apiKey,
+          url: redmine_url+'/issues/'+issue_id+'.json?key={{setting.apiKey}}',
           type:'GET',
           dataType: 'json',
-          proxy_v2: true
+          secure: true
         };
       },
-      getTrackers: function(redmine_url, apiKey)
+      getTrackers: function(redmine_url)
       {
         return {
-          url: redmine_url+'/projects/'+this.PROJECT_TO_USE+'.json?key='+apiKey+'&include=trackers',
+          url: redmine_url+'/projects/'+this.PROJECT_TO_USE+'.json?key={{setting.apiKey}}&include=trackers',
           type: 'GET',
           dataType: 'json',
-          proxy_v2: true
+          secure: true
         };
       }
    },
@@ -93,7 +89,7 @@
         if(this.settings.redmine_url.search('\/$') != -1){
           this.fn_renderError('Your Redmine URL has a "/" at the end. Remove it and try again.<p>' + this.settings.redmine_url + '</p>', 'error');
         }else{
-          this.ajax('getProjects', this.settings.redmine_url, this.settings.apiKey);
+          this.ajax('getProjects', this.settings.redmine_url);
         }
       }
     },
@@ -124,13 +120,13 @@
         var ticket_desc = this.ticket().description();
         ticket_desc = ticket_desc.replace( /&/gim, '' ).replace( /</gim, '').replace( />/gim, '').replace(/:/gim, '');
         var data = {"issue": {"subject": subject, "project_id": this.PROJECT_TO_USE, "tracker_id": tracker, "description": "This issue was pushed from Zendesk to Redmine.\n---\n\nDescription:\n"+ticket_desc+"\n---\n\nAdditional Message from Zendesk\n---\n"+this.$('#rm_note').val()+"\n\nTicket URL: https://"+this.currentAccount().subdomain()+".zendesk.com/tickets/"+this.ticket().id()+"\n\n"}};
-        this.ajax('postRedmine', this.settings.project, this.settings.apiKey, this.settings.redmine_url, data);
+        this.ajax('postRedmine', this.settings.project, this.settings.redmine_url, data);
       }
     },
     fn_projectSelect: function(e)
     {
       this.PROJECT_TO_USE = e.target.id;
-      this.ajax('getTrackers', this.settings.redmine_url, this.settings.apiKey);
+      this.ajax('getTrackers', this.settings.redmine_url);
     },
     fn_saveTrackers: function(data)
     {
@@ -161,11 +157,11 @@
       }
     },
     fn_reset: function(){
-      this.ajax('getProjects', this.settings.redmine_url, this.settings.apiKey);
+      this.ajax('getProjects', this.settings.redmine_url);
     },
     fn_get_issue: function(e){
       var issue_id = e.target.classList[1].replace("id_", "");
-      this.ajax('getIssue', this.settings.redmine_url, this.settings.apiKey, issue_id);
+      this.ajax('getIssue', this.settings.redmine_url, issue_id);
     },
     fn_show_issue: function(data){
       this.switchTo('show_issue', {issue: data.issue, url: this.settings.redmine_url+"/issues/"+data.issue.id });
