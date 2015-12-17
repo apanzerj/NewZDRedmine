@@ -87,7 +87,7 @@
       if ( !this.doneLoading && this.ticket().status() != null && this.ticket().requester().id()) {
         this.doneLoading = true;
         if(this.settings.redmine_url.search('\/$') != -1){
-          this.fn_renderError('Your Redmine URL has a "/" at the end. Remove it and try again.<p>' + this.settings.redmine_url + '</p>', 'error');
+          this.settings.redmine_url = this.settings.redmine_url.slice(0, -1);
         }else{
           this.ajax('getProjects', this.settings.redmine_url);
         }
@@ -106,6 +106,7 @@
         this.fn_renderError("No data returned. Please check your API key.");
       }else{
         this.PROJECTS = data;
+
         this.switchTo('projectList', {project_data: data});
         this.ajax('getAudit', this.ticket().id());
       }
