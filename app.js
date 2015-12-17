@@ -112,8 +112,8 @@
         data.projects = data.projects.filter(function(project) {
           return project.status === PROJECT_STATUS_ACTIVE;
         }).sort(function(a, b){
-          if(a.name < b.name) return -1;
-          if(a.name > b.name) return 1;
+          if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+          if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
           return 0;
         });
 
