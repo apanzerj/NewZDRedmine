@@ -90,9 +90,8 @@
         this.doneLoading = true;
         if(this.settings.redmine_url.search('\/$') != -1){
           this.settings.redmine_url = this.settings.redmine_url.slice(0, -1);
-        }else{
-          this.ajax('getProjects', this.settings.redmine_url);
         }
+        this.ajax('getProjects', this.settings.redmine_url);
       }
     },
     fn_result: function(result){
@@ -108,7 +107,7 @@
         this.fn_renderError("No data returned. Please check your API key.");
       }else{
 
-        // Only show active projects
+        // Only show active projects and sort by name
         data.projects = data.projects.filter(function(project) {
           return project.status === PROJECT_STATUS_ACTIVE;
         }).sort(function(a, b){
