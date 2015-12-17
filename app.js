@@ -110,6 +110,12 @@
         // Only show active projects and sort by name
         data.projects = data.projects.filter(function(project) {
           return project.status === PROJECT_STATUS_ACTIVE;
+        }).map(function(project) {
+          // Prefix parent project's name
+          if(project.hasOwnProperty('parent')) {
+            project.name = project.parent.name + ' - ' + project.name;
+          }
+          return project;
         }).sort(function(a, b){
           if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
           if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;

@@ -1,5 +1,4 @@
 <div id="projectList_div">
-<p><h3>Current Projects:</h3></p>
 <ul>
 {{#each project_data.projects}}
     <li>
