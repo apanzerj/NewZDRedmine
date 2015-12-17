@@ -1,4 +1,6 @@
+
 (function(){
+  var PROJECT_STATUS_ACTIVE = 1;
   return {
     PROJECT_TO_USE: '1',
     TRACKERS: [],
@@ -36,7 +38,7 @@
       },
       getProjects: function(redmine_url){
         return {
-          url: redmine_url+'/projects.json?key={{setting.apiKey}}',
+          url: redmine_url+'/projects.json?key={{setting.apiKey}}&limit=100',
           type:'GET',
           dataType: 'json',
           secure: true
@@ -105,6 +107,16 @@
       if(data == null){
         this.fn_renderError("No data returned. Please check your API key.");
       }else{
+
+        // Only show active projects
+        data.projects = data.projects.filter(function(project) {
+          return project.status === PROJECT_STATUS_ACTIVE;
+        }).sort(function(a, b){
+          if(a.name < b.name) return -1;
+          if(a.name > b.name) return 1;
+          return 0;
+        });
+
         this.PROJECTS = data;
 
         this.switchTo('projectList', {project_data: data});
