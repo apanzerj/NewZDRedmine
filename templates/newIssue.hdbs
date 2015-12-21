@@ -1,0 +1,29 @@
+<div id="newIssue">
+    <div class="form_field">
+        <label>Subject</label>
+        <p><input type="text" id="rm_subject"></p>
+    </div>
+    <div class="form_field">
+        <label>Tracker</label>
+        <select id="rm_tracker">
+            {{#each trackers.trackers}}
+                <option value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="form_field">
+        <label>Assign to</label>
+        <select id="rm_assignee">
+            {{#each members}}
+                <option value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="form_field">
+        <label>Additional Comments</label>
+        <textarea id="rm_note" />
+    </div>
+    <div class="form__field">
+        <p><a class="btn" id="submitToRedmine">Submit</a></p>
+    </div>
+</div>

@@ -1,6 +1,11 @@
 <head>
 	 <h3>{{setting "name"}}</h3>
 </head>
+
+<section class="navigation">
+    <ul class="nav nav-pills">
+        <li class="js-issues active"><a class="issues">Issues</a></li>
+        <li class="js-projects"><a class="projects">Projects</a></li>
+    </ul>
+</section>
 <section data-main />
-<footer>
-</footer>

@@ -1,0 +1,3 @@
+{{#each issues}}
+    <a class="issue btn btn-mini" data-id="{{this}}">Issue {{this}}</a>
+{{/each}}

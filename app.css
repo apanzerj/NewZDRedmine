@@ -1,24 +1,44 @@
-li {
-  & + li                      { margin-top: 0.4em; }
-            .project_list_li  { visibility: hidden; }
-  &:hover   .project_list_li  { visibility: visible; }
-}
 textarea {
-  width: 280px;
-  height: 100px;
+    width: 280px;
+    height: 100px;
 }
+
 input {
-  width: 280px;
+    width: 280px;
 }
+
 #newIssue {
-  font-size:12px;
+    font-size: 12px;
 }
+
 #newIssue > p {
-  margin-top: 5px;
+    margin-top: 5px;
 }
-.caption{
-  font-weight: bold;
+
+.caption {
+    font-weight: bold;
 }
-.progress{
-  width:100px;
+
+.form_field {
+    margin-bottom: 8px;
+}
+
+.progress {
+    width: 100px;
+}
+
+.zdredmine-list {
+    list-style: none;
+    margin: -5px;
+
+    &__entry {
+        padding: 5px;
+        margin: 0;
+        a {
+             display: block;
+        }
+        &:hover {
+            background-color: #ebebeb;
+        }
+    }
 }

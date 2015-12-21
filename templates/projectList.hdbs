@@ -1,14 +1,9 @@
 <div id="projectList_div">
-<ul>
-{{#each project_data.projects}}
-    <li>
-        <i class="icon-arrow-right project_list_li"></i>
-        <a id="{{this.id}}" class="project" title="{{this.id}}">{{this.name}}</a>
-    </li>
-{{/each}}
-</ul>
+    <ul class="zdredmine-list">
+        {{#each project_data.projects}}
+            <li class="zdredmine-list__entry">
+                <a id="{{this.id}}" class="js-project" title="{{this.id}}">{{this.name}}</a>
+            </li>
+        {{/each}}
+    </ul>
 </div>
-<p><h3> Issue List: </h3></p>
-{{#each issue}}
-<a class="issue id_{{this}} btn btn-mini">Issue {{this}}</a>
-{{/each}}
