@@ -1,3 +1,5 @@
 {{#each issues}}
-    <a class="issue btn btn-mini" data-id="{{this}}">Issue {{this}}</a>
+    <a class="issue {{#if this.closed_on}} is-done {{/if}}" data-id="{{this.id}}">
+        {{this.id}}: {{this.subject}}
+    </a>
 {{/each}}

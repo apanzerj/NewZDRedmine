@@ -75,7 +75,6 @@
             'click .js-project': 'projectSelect',
             'updateTicket.done': 'reset',
             'click .issue': 'get_issue',
-            'getIssue.done': 'show_issue',
             'click .back_button': 'onActivated',
 
             'click .nav-pills .js-projects': function () {
@@ -218,7 +217,30 @@
             }
 
             if (ticketHasIssue) {
-                this.switchTo('issueList', {issues: issueList});
+
+                var spawned = 0;
+                var returned = 0;
+                var issueDetails = [];
+                issueList.forEach(function (issueId) {
+                    spawned++;
+
+                    this.ajax('getIssue', this.settings.redmine_url, issueId)
+                        .done(function (data) {
+                            issueDetails.push(data.issue);
+                        }.bind(this))
+                        .always(function () {
+                            returned++;
+                        });
+                }.bind(this));
+
+                var interval = setInterval(function () {
+                    if (spawned == returned) {
+                        clearTimeout(interval);
+
+                        this.switchTo('issueList', {issues: issueDetails});
+                    }
+                }.bind(this), 500);
+
             } else {
                 this.switchTo('projectList', {project_data: this.PROJECTS});
             }
@@ -228,10 +250,13 @@
         },
         get_issue: function (e) {
             var issue_id = e.target.dataset.id;
-            this.ajax('getIssue', this.settings.redmine_url, issue_id);
+            this.ajax('getIssue', this.settings.redmine_url, issue_id)
+                .done(function (data) {
+                    this.show_issue(data);
+                }.bind(this));
         },
         show_issue: function (data) {
-            this.switchTo('show_issue', {
+            this.switchTo('showIssue', {
                 issue: data.issue,
                 url: this.settings.redmine_url + "/issues/" + data.issue.id
             });

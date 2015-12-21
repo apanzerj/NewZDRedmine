@@ -1,5 +1,7 @@
 <div>
-<p class="caption subject">Subject:</p>
+    <a class="back_button">Back</a> - <a href="{{url}}" target="_new">Open In Redmine <i class="icon-share-alt"> </i></a>
+<br />
+    <p class="caption subject">Subject:</p>
 <p>{{issue.subject}}</p>
 <br />
 <p class="caption">Project Name:</p>
@@ -24,6 +26,4 @@
 </div></p>
 <br />
 <p><span class="caption">Time Spent:</span> {{issue.spent_hours}}</p>
-<br />
-<a class="back_button">Back</a> - <a href="{{url}}" target="_new">Open In Redmine <i class="icon-share-alt"> </i></a>
 </div>
