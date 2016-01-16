@@ -1,0 +1,7 @@
+{{#each issues}}
+    <a class="issue {{#if this.closed_on}} is-done {{/if}}" data-id="{{this.id}}">
+        {{this.id}}: {{this.subject}}
+    </a>
+{{else}}
+    <p class="empty">{{t "no-entries"}}</p>
+{{/each}}

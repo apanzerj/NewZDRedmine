@@ -1,9 +1,20 @@
 {
-  "app": {
-    "description":  "This is a template to use",
-    "name":         "Template App"
-  },
-  "issue":{
-    "posted": "Issue created!"
+  "no-entries": "There are no assigned issues.",
+  "back" : "Back",
+  "openInRedmine" : "Open in Redmine",
+  "issues": "Issues",
+  "projects": "Projects",
+  "issue": {
+    "subject": "Subject",
+    "tracker": "Tracker",
+    "assignTo": "Assign To",
+    "project": "Project",
+    "description": "Description",
+    "done": "Done",
+    "author": "Author",
+    "additionalComments": "Additional Comments",
+    "submit": "Submit",
+    "posted": "Issue created!",
+    "pushed": "This ticket was pushed to Redmine"
   }
 }
