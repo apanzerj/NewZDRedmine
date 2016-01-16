@@ -14,6 +14,7 @@
     "author": "Autor",
     "additionalComments": "Kommentar",
     "submit": "Absenden",
-    "posted": "Ticket erstellt!"
+    "posted": "Ticket erstellt!",
+    "pushed": "Ticket zu Redmine hinzugefügt."
   }
 }
