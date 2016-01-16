@@ -1,5 +1,5 @@
 <div>
-There was an error with the Redmine Integration. The error message was:
+    There was an error with the Redmine Integration. The error message was:
 </div>
 <div>
 {{error}}

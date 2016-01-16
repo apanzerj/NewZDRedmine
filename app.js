@@ -1,13 +1,14 @@
 (function () {
     var PROJECT_STATUS_ACTIVE = 1;
     return {
-        PROJECT_TO_USE: '1',
+        PROJECT_TO_USE: 1,
         MEMBERS: [],
         TRACKERS: [],
         PROJECTS: [],
         appID: 'RedmineAPP_IntegrationV3',
         requests: {
             getAudit: function (id) {
+                this.showSpinner(true);
                 return {
                     url: '/api/v2/tickets/' + id + '/audits.json',
                     type: 'GET',
@@ -16,6 +17,7 @@
                 };
             },
             updateTicket: function (id, data) {
+                this.showSpinner(true);
                 return {
                     url: '/api/v2/tickets/' + id + '.json',
                     type: 'PUT',
@@ -24,42 +26,46 @@
                     contentType: 'application/json'
                 };
             },
-            postRedmine: function (project, redmine_url, data) {
+            postRedmine: function (project, data) {
+                this.showSpinner(true);
                 return {
-                    url: redmine_url + '/issues.json?key={{setting.apiKey}}',
+                    url: this.settings.redmine_url + '/issues.json?key={{setting.apiKey}}',
                     type: 'POST',
                     dataType: 'json',
                     data: data,
                     secure: true
                 };
             },
-            getProjects: function (redmine_url) {
+            getProjects: function () {
+                this.showSpinner(true);
                 return {
-                    url: redmine_url + '/projects.json?key={{setting.apiKey}}&limit=100',
+                    url: this.settings.redmine_url + '/projects.json?key={{setting.apiKey}}&limit=100',
                     type: 'GET',
                     dataType: 'json',
                     secure: true
                 };
             },
-            getIssue: function (redmine_url, issue_id) {
+            getIssue: function (issue_id) {
+                this.showSpinner(true);
                 return {
-                    url: redmine_url + '/issues/' + issue_id + '.json?key={{setting.apiKey}}',
+                    url: this.settings.redmine_url + '/issues/' + issue_id + '.json?key={{setting.apiKey}}',
                     type: 'GET',
                     dataType: 'json',
                     secure: true
                 };
             },
-            getTrackers: function (redmine_url) {
+            getTrackers: function () {
                 return {
-                    url: redmine_url + '/projects/' + this.PROJECT_TO_USE + '.json?key={{setting.apiKey}}&include=trackers',
+                    url: this.settings.redmine_url + '/projects/' + this.PROJECT_TO_USE + '.json?key={{setting.apiKey}}&include=trackers',
                     type: 'GET',
                     dataType: 'json',
                     secure: true
                 };
             },
-            getMembers: function (redmine_url) {
+            getMembers: function () {
+                this.showSpinner(true);
                 return {
-                    url: redmine_url + '/projects/' + this.PROJECT_TO_USE + '/memberships.json?key={{setting.apiKey}}',
+                    url: this.settings.redmine_url + '/projects/' + this.PROJECT_TO_USE + '/memberships.json?key={{setting.apiKey}}',
                     type: 'GET',
                     dataType: 'json',
                     secure: true
@@ -79,7 +85,7 @@
 
             'click .nav-pills .js-projects': function () {
                 this.setActivePill('js-projects');
-                this.ajax('getProjects', this.settings.redmine_url);
+                this.ajax('getProjects');
             },
             'click .nav-pills .js-issues': function () {
                 this.setActivePill('js-issues');
@@ -103,6 +109,7 @@
             }
 
             this.doneLoading = false;
+            this.showSpinner(true);
             this.loadIfDataReady();
         },
         loadIfDataReady: function () {
@@ -118,7 +125,7 @@
                 "ticket": {
                     "comment": {
                         "public": false,
-                        "value": "This ticket was pushed to Redmine\n\n" + this.settings.redmine_url + "/issues/" + id + "\n\n"
+                        "value": this.I18n.t('issue.pushed') + "\n\n" + this.settings.redmine_url + "/issues/" + id + "\n\n"
                     }, "metadata": {"pushed_to_redmine": true, "redmine_id": id}
                 }
             };
@@ -128,29 +135,34 @@
         listProjects: function (data) {
             if (data == null) {
                 this.renderError("No data returned. Please check your API key.");
-            } else {
-
-                // Only show active projects and sort by name
-                data.projects = data.projects.filter(function (project) {
-                    return project.status === PROJECT_STATUS_ACTIVE;
-                }).map(function (project) {
-                    // Prefix parent project's name
-                    if (project.hasOwnProperty('parent')) {
-                        project.name = project.parent.name + ' - ' + project.name;
-                    }
-                    return project;
-                }).sort(function (a, b) {
-                    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-                    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-                    return 0;
-                });
-
-                this.PROJECTS = data;
-
-                this.switchTo('projectList', {project_data: data});
+                return false;
             }
+
+            // Only show active projects and sort by name
+            data.projects = data.projects.filter(function (project) {
+                return project.status === PROJECT_STATUS_ACTIVE;
+            }).map(function (project) {
+                // Prefix parent project's name
+                if (project.hasOwnProperty('parent')) {
+                    project.name = project.parent.name + ' - ' + project.name;
+                }
+                return project;
+            }).sort(function (a, b) {
+                if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+                if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+                return 0;
+            });
+
+            this.PROJECTS = data;
+
+            this.setActivePill('js-projects');
+            this.switchTo('projectList', {project_data: data});
+            this.showSpinner(false);
         },
         prep_to_post: function () {
+
+            this.showSpinner(true);
+
             var subject = this.$('#rm_subject').val();
             var tracker = this.$('#rm_tracker').val();
             var priority = this.$('#rm_priority').val();
@@ -158,24 +170,25 @@
             if (subject.length < 1) {
                 services.notify('You must include a subject.', 'error');
             } else {
-                var ticket_desc = this.ticket().description();
-                ticket_desc = ticket_desc.replace(/&/gim, '').replace(/</gim, '').replace(/>/gim, '').replace(/:/gim, '');
                 var data = {
                     "issue": {
                         "subject": subject,
                         "project_id": this.PROJECT_TO_USE,
                         "tracker_id": tracker,
                         "assigned_to_id": asignee,
-                        "description": "This issue was pushed from Zendesk to Redmine.\n---\n\n" + this.$('#rm_note').val() + "\n\nTicket URL: https://" + this.currentAccount().subdomain() + ".zendesk.com/tickets/" + this.ticket().id() + "\n\n"
+                        "description": this.$('#rm_note').val() + "\n\nTicket URL: https://" + this.currentAccount().subdomain() + ".zendesk.com/tickets/" + this.ticket().id() + "\n\n"
                     }
                 };
-                this.ajax('postRedmine', this.settings.project, this.settings.redmine_url, data);
+                this.ajax('postRedmine', this.settings.project, data);
             }
         },
         projectSelect: function (e) {
+
+            this.showSpinner(true);
+
             this.PROJECT_TO_USE = e.target.id;
             var doneRequests = 0;
-            this.ajax('getTrackers', this.settings.redmine_url)
+            this.ajax('getTrackers')
                 .done(function (data) {
                     this.TRACKERS = data.project;
                 }.bind(this))
@@ -183,7 +196,7 @@
                     doneRequests++;
                 });
 
-            this.ajax('getMembers', this.settings.redmine_url)
+            this.ajax('getMembers')
                 .done(function (data) {
                     var members = [];
                     data.memberships.forEach(function (membership) {
@@ -199,6 +212,7 @@
             var interval = setInterval(function () {
                 if (doneRequests == 2) {
                     clearInterval(interval);
+                    this.showSpinner(false);
                     this.switchTo('newIssue', {trackers: this.TRACKERS, members: this.MEMBERS});
                 }
             }.bind(this), 500);
@@ -217,50 +231,75 @@
                 }
             }
 
-            if (ticketHasIssue) {
-
-                var spawned = 0;
-                var returned = 0;
-                var issueDetails = [];
-                issueList.forEach(function (issueId) {
-                    spawned++;
-
-                    this.ajax('getIssue', this.settings.redmine_url, issueId)
-                        .done(function (data) {
-                            issueDetails.push(data.issue);
-                        }.bind(this))
-                        .always(function () {
-                            returned++;
-                        });
-                }.bind(this));
-
-                var interval = setInterval(function () {
-                    if (spawned == returned) {
-                        clearTimeout(interval);
-
-                        this.switchTo('issueList', {issues: issueDetails});
-                    }
-                }.bind(this), 500);
-
-            } else {
-                this.switchTo('projectList', {project_data: this.PROJECTS});
+            if ( ! ticketHasIssue) {
+                // No issues available, so load project list
+                this.ajax('getProjects');
+                this.showIssueTab(false);
+                return;
             }
+
+            this.showIssueTab(true);
+
+            var spawned = 0;
+            var returned = 0;
+            var issueDetails = [];
+            issueList.forEach(function (issueId) {
+                spawned++;
+
+                this.ajax('getIssue', issueId)
+                    .done(function (data) {
+                        issueDetails.push(data.issue);
+                    }.bind(this))
+                    .always(function () {
+                        returned++;
+                    });
+            }.bind(this));
+
+            var interval = setInterval(function () {
+                if (spawned == returned) {
+                    clearTimeout(interval);
+
+                    this.setActivePill('js-issues');
+                    this.switchTo('issueList', {issues: issueDetails});
+                    this.showSpinner(false);
+                }
+            }.bind(this), 500);
+
         },
         reset: function () {
-            this.ajax('getProjects', this.settings.redmine_url);
+            this.ajax('getAudit', this.ticket().id());
         },
         get_issue: function (e) {
+            this.showSpinner(true);
             var issue_id = e.target.dataset.id;
-            this.ajax('getIssue', this.settings.redmine_url, issue_id)
+            this.ajax('getIssue', issue_id)
                 .done(function (data) {
                     this.show_issue(data);
                 }.bind(this));
         },
         show_issue: function (data) {
+            this.setActivePill('js-issues');
+            this.showSpinner(false);
             this.switchTo('showIssue', {
                 issue: data.issue,
                 url: this.settings.redmine_url + "/issues/" + data.issue.id
             });
+        },
+        showSpinner: function(status) {
+            if(status === true) {
+                this.$('#spinner').show();
+                this.$('#main').hide();
+            } else {
+                this.$('#spinner').hide();
+                this.$('#main').show();
+            }
+        },
+        showIssueTab: function(status) {
+            if(status) {
+                this.$('.js-issues').show();
+            } else {
+                this.$('.js-issues').hide();
+            }
         }
     };
 }());    

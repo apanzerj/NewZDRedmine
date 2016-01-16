@@ -1,31 +1,29 @@
 <div>
 <p>
-    <a class="back_button">Back</a> - <a href="{{url}}" target="_new">Open In Redmine <i class="icon-share-alt"> </i></a>
+    <a class="back_button">{{t 'back'}}</a> - <a href="{{url}}" target="_new">{{t 'openInRedmine' }} <i
+        class="icon-share-alt"> </i></a>
 </p>
     <br />
-    <p class="caption subject">Subject:</p>
+    <p>
+        <span class="label">{{issue.tracker.name}}</span> /
+        <span class="label">{{issue.status.name}}</span> /
+        <span class="label">{{issue.priority.name}}</span>
+    </p>
+    <br />
+    <p class="caption subject">{{t 'issue.subject'}}</p>
 <p>{{issue.subject}}</p>
 <br />
-<p class="caption">Project Name:</p>
+<p class="caption">{{t 'issue.project'}}</p>
 <p>{{issue.project.name}}</p>
 <br />
-<p class="caption">Tracker/Status/Priority:</p>
-<p>
-  <span class="label">{{issue.tracker.name}}</span> /
-  <span class="label">{{issue.status.name}}</span> /
-  <span class="label">{{issue.priority.name}}</span>
-</p>
-<br />
-<p class="caption">Author:</p>
+<p class="caption">{{t 'issue.author'}}</p>
 <p>{{issue.author.name}}</p>
 <br />
-<p class="caption">Description</p>
+<p class="caption">{{t 'issue.description'}}</p>
 <p>{{issue.description}}</p>
 <br />
-<p class="caption">{{issue.done_ratio}}% Done
+<p class="caption">{{issue.done_ratio}}% {{t 'issue.done'}}
 <div class="progress">
   <div class="bar" style="width: {{issue.done_ratio}}%;"></div>
 </div></p>
-<br />
-<p><span class="caption">Time Spent:</span> {{issue.spent_hours}}</p>
 </div>

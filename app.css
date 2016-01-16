@@ -1,6 +1,8 @@
 textarea {
     width: 280px;
     height: 100px;
+    border-color: #d3d3d3;
+    background-image: none;
 }
 
 input {
@@ -17,6 +19,10 @@ input {
 
 .caption {
     font-weight: bold;
+}
+
+.navigation {
+    margin-top: .8em;
 }
 
 a.issue {

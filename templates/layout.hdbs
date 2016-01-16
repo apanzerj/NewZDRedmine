@@ -4,8 +4,9 @@
 
 <section class="navigation">
     <ul class="nav nav-pills">
-        <li class="js-issues active"><a class="issues">Issues</a></li>
-        <li class="js-projects"><a class="projects">Projects</a></li>
+        <li class="js-issues active"><a class="issues">{{t 'issues'}}</a></li>
+        <li class="js-projects"><a class="projects">{{t 'projects'}}</a></li>
     </ul>
 </section>
-<section data-main />
+<div id="spinner">{{ spinner 'dotted' }}</div>
+<section id="main" data-main />
