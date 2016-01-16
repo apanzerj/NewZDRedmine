@@ -1,0 +1,19 @@
+{
+  "no-entries": "Keine Tickets vorhanden.",
+  "back" : "Zurück",
+  "openInRedmine" : "In Redmine öffnen",
+  "issues": "Tickets",
+  "projects": "Projekte",
+  "issue": {
+    "subject": "Betreff",
+    "tracker": "Tracker",
+    "assignTo": "Zuweisen an",
+    "project": "Projekt",
+    "description": "Beschreibung",
+    "done": "erledigt",
+    "author": "Autor",
+    "additionalComments": "Kommentar",
+    "submit": "Absenden",
+    "posted": "Ticket erstellt!"
+  }
+}
