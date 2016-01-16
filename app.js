@@ -195,9 +195,10 @@
                     doneRequests++;
                 });
 
+            // Wait for both requests to finish
             var interval = setInterval(function () {
                 if (doneRequests == 2) {
-                    clearTimeout(interval);
+                    clearInterval(interval);
                     this.switchTo('newIssue', {trackers: this.TRACKERS, members: this.MEMBERS});
                 }
             }.bind(this), 500);
