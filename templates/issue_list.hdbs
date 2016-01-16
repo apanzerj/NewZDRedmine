@@ -1,4 +1,0 @@
-<p><h3> Issue List</h3></p>
-{{#each issue}}
-<a class="issue id_{{id}} btn btn-mini">Issue {{id}}</a>
-{{/each}}
