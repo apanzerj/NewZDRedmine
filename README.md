@@ -33,6 +33,7 @@ This [Zendesk](https://www.zendesk.com) app allows agents and admins to interfac
 
 ## Contributors
 Tobias Kündig (tobias-kuendig)
+Adam Panzer (apanzerj)
 
 
 ## License
